@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 @Autonomous(name = "Final Alignment")
 public class Align extends LinearOpMode {
+
     private Limelight3A limelight;
     private DistanceEstimator distanceEstimator;
     private Follower follower;
