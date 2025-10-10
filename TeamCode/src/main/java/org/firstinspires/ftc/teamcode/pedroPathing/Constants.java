@@ -19,13 +19,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(12) // set the mass of the robot in kilograms
-            .forwardZeroPowerAcceleration(-38.275) // set the value instead of 0.5
-            .lateralZeroPowerAcceleration(-67.208)//set the value instead of 0.2
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, 0))
-            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.01, 0))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015,0.0,0.00005,0.6,0.005))
-            .centripetalScaling(0.0007);
+            .mass(12);// set the mass of the robot in kilograms
+//            .forwardZeroPowerAcceleration(-38.275) // set the value instead of 0.5
+//            .lateralZeroPowerAcceleration(-67.208)//set the value instead of 0.2
+//            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, 0))
+//            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.01, 0))
+//            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015,0.0,0.00005,0.6,0.005))
+//            .centripetalScaling(0.0007);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -36,26 +36,26 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(58.59)//add the velocity over there instead of 25
-            .yVelocity(46.098); //add the velocity over there instead of 25
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+//            .xVelocity(58.59)//add the velocity over there instead of 25
+//            .yVelocity(46.098); //add the velocity over there instead of 25
 
-    public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(3)
-            .strafePodX(2.5)
-            .distanceUnit(DistanceUnit.INCH)
-            .hardwareMapName("PinPoint")
-            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
-            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+//    public static PinpointConstants localizerConstants = new PinpointConstants()
+//            .forwardPodY(3)
+//            .strafePodX(2.5)
+//            .distanceUnit(DistanceUnit.INCH)
+//            .hardwareMapName("PinPoint")
+//            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
+//            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+//            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+//    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
-                .pathConstraints(pathConstraints)
+//                .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
-                .pinpointLocalizer(localizerConstants)
+//                .pinpointLocalizer(localizerConstants)
                 .build();
     }
 
