@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Shooter {
-    private DcMotorEx S1;
-    private DcMotorEx S2;
-    private Servo Push;
+    private final DcMotorEx S1;
+    private final DcMotorEx S2;
+    private final Servo Push;
 
     public Shooter(HardwareMap hardwareMap){
         S1 = hardwareMap.get(DcMotorEx.class, "S1");
@@ -23,26 +23,33 @@ public class Shooter {
         S1.setDirection(DcMotorEx.Direction.REVERSE);
 
         S1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        S2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        S1.setVelocityPIDFCoefficients(10.5, 0.0005, 12, 5);
+        S1.setVelocityPIDFCoefficients(20, 1, 20, 5);
+        S2.setVelocityPIDFCoefficients(20, 1, 20, 5);
+
     }
+
     public void startShooter(){
-        S1.setVelocity(1500);
-        S2.setVelocity(1500);
+        S1.setVelocity(1800);
+        S2.setVelocity(1800);
     }
     public void stopShooter(){
-        S1.setVelocity(0);
-        S2.setVelocity(0);
+        S1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        S2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        S1.setPower(0);
+        S2.setPower(0);
     }
 
     public void shoot(){
-        if (S1.getVelocity()>1400){
-            Push.setPosition(0.7);
+        if (S1.getVelocity()>1500){
+            Push.setPosition(0.4);
         }
     }
 
     public void resetServo(){
-        Push.setPosition(1);
+        Push.setPosition(0);
     }
 }
 

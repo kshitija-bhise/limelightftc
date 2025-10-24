@@ -11,17 +11,13 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.PathConstraints;
-
-import org.firstinspires.ftc.teamcode.Hardware.Claw;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 public class BlueAllianceCorner {
         public static PathBuilder builder = new PathBuilder(follower);
-        public static Pose start = new Pose(24.6, 122.6, Math.toRadians(-45));
-        public static Pose score1 = new Pose(48, 99.6);
-        public static Pose Collect1 = new Pose(33.44, 84, Math.toRadians(-45));
-
+        public static Pose start = new Pose(28.5, 128, Math.toRadians(180));
+        public static Pose score1 = new Pose(60,85,Math.toRadians(135));
 
         public static PathChain launch1(){
                 return new PathBuilder(follower)
@@ -31,8 +27,7 @@ public class BlueAllianceCorner {
                                         score1
                                 )
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(-45))
-                        //.setZeroPowerAcceleration
+                        .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(135))
                         .build();
         }
 
@@ -40,13 +35,12 @@ public class BlueAllianceCorner {
                 return new PathBuilder(follower)
                         .addPath(
                                 new BezierCurve(
-                                        score1,
-                                        new Pose(56.698, 88.962),
-                                        new Pose(33.450, 84.692)
+                                        new Pose(33.213, 114.820),
+                                        new Pose(65.476, 80.659),
+                                        new Pose(35.585, 83.980)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(-180))
-                        //.setZeroPowerAcceleration
+                        .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(180))
                         .build();
 
         }
@@ -55,13 +49,12 @@ public class BlueAllianceCorner {
                 return new PathBuilder(follower)
                         .addPath(
                                 new BezierCurve(
-                                        new Pose(34.450, 84.692),
-                                        new Pose(56.936, 89.199),
-                                        new Pose(47.921, 99.638)
+                                        new Pose(35.585, 83.980),
+                                        new Pose(65.713, 80.422),
+                                        new Pose(44.837, 105.094)
                                 )
                         )
-                        .setTangentHeadingInterpolation()
-                        .setReversed()
+                        .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(140))
                         .build();
 
         }
@@ -70,12 +63,12 @@ public class BlueAllianceCorner {
                 return new PathBuilder(follower)
                         .addPath(
                                 new BezierCurve(
-                                        new Pose(47.921, 100.112),
-                                        new Pose(76.863, 70.695),
-                                        new Pose(37.245, 60.494)
+                                        new Pose(45.549, 105.094),
+                                        new Pose(78.761, 59.783),
+                                        new Pose(36.059, 60.494)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(-180))
+                        .setLinearHeadingInterpolation(Math.toRadians(140), Math.toRadians(180))
                         .build();
         }
 
@@ -83,13 +76,24 @@ public class BlueAllianceCorner {
                 return new PathBuilder(follower)
                         .addPath(
                                 new BezierCurve(
-                                        new Pose(37.245, 60.494),
-                                        new Pose(76.389, 70.695),
-                                        new Pose(48.158, 99.400)
+                                        new Pose(36.059, 60.494),
+                                        new Pose(78.761, 59.783),
+                                        new Pose(45.311, 105.094)
                                 )
                         )
-                        .setTangentHeadingInterpolation()
-                        .setReversed()
+                        .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(140))
+                        .build();
+        }
+
+        public static PathChain Test(){
+                return new PathBuilder(follower)
+                        .addPath(
+                                new BezierLine(
+                                        new Pose(72.119, 8.303),
+                                        new Pose(72.119, 69.984)
+                                )
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build();
         }
 }

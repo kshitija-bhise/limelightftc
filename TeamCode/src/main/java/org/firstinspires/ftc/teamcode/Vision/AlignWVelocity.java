@@ -14,8 +14,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name = "Alignment")
-public class Alignment extends OpMode {
+@Autonomous(name = "AlignmentVelocity")
+public class AlignWVelocity extends OpMode {
     private Limelight3A limelight;
     private DistanceEstimator distanceEstimator;
     private Follower follower;
@@ -23,6 +23,15 @@ public class Alignment extends OpMode {
     private final double target_distance = 50;
     private final double dist_tolerance = 1.0;
     private final double kP = 0.05;
+    private final double RPM = 423.0;
+    private final double Gear_Ratio = 1.85;
+    private final double CPWR = 4.094;
+    private final double Wheel_circumference = Math.PI * CPWR;
+    private final double Ticks_Per_Rev = 384.5;
+
+
+
+
 
     @Override
     public void init() {
@@ -35,6 +44,8 @@ public class Alignment extends OpMode {
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
         LR.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
 
         limelight.pipelineSwitch(6);
         limelight.start();
@@ -71,21 +82,22 @@ public class Alignment extends OpMode {
             stop();
             telemetry.addLine("Target distance reached");
         } else {
-            double power = kP * error;
+            double inchesPerSec = kP * error;
 
-            power = Math.max(-0.5, Math.min(0.5, power));
+            inchesPerSec = Math.max(-80, Math.min(80, inchesPerSec));
 
-            forward(power);
+            driveVelocity(inchesPerSec);
         }
 
         telemetry.update();
     }
 
-    public void  forward(double power){
-        RF.setPower(power);
-        RR.setPower(power);
-        LF.setPower(power);
-        LR.setPower(power);
+    public void  driveVelocity(double inchesPerSec){
+        double TPS = (inchesPerSec/Wheel_circumference) * Ticks_Per_Rev * Gear_Ratio;
+        RF.setVelocity(TPS);
+        LF.setVelocity(TPS);
+        LR.setVelocity(TPS);
+        RR.setVelocity(TPS);
     }
 
     public void backward(double power){
@@ -96,9 +108,9 @@ public class Alignment extends OpMode {
     }
 
     public void stop(){
-        RF.setPower(0);
-        RR.setPower(0);
-        LF.setPower(0);
-        LR.setPower(0);
+        RF.setVelocity(0);
+        RR.setVelocity(0);
+        LF.setVelocity(0);
+        LR.setVelocity(0);
     }
 }

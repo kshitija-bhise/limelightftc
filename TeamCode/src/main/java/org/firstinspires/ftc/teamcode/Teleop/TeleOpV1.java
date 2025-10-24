@@ -1,56 +1,119 @@
-package org.firstinspires.ftc.teamcode.Teleop;
-
-import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.driveConstants;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerConstants;
-
+package org.firstinspires.ftc.teamcode.pedroPathing;
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.ftc.FollowerBuilder;
-import com.pedropathing.paths.PathConstraints;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Hardware.ActiveIntake;
-import org.firstinspires.ftc.teamcode.Hardware.ServoAngle;
-import org.firstinspires.ftc.teamcode.Hardware.ServoTurn;
-import org.firstinspires.ftc.teamcode.Hardware.Shooter;
+import org.firstinspires.ftc.teamcode.Vision.DistanceEstimator;
 
-@TeleOp(name = "DecodeV1")
-public class TeleOpV1 extends LinearOpMode {
+import java.util.function.Supplier;
+
+@Configurable
+@TeleOp(name = "TELEOP")
+public class TeleOpV1 extends OpMode {
     private Follower follower;
-    private Shooter shooter;
-    private ActiveIntake Intake;
-    private ServoAngle servoAngle;
-    private ServoTurn servoTurn;
+    public static Pose startingPose; //See ExampleAuto to understand how to use this
+    private boolean automatedDrive;
+    private Supplier<PathChain> pathChain;
+    private TelemetryManager telemetryM;
+    private boolean slowMode = false;
+    private double slowModeMultiplier = 0.5;
+
+    private Limelight3A limelight;
+
+    private DistanceEstimator distanceEstimator;
 
     @Override
-    public void runOpMode() throws InterruptedException {
-        Intake = new ActiveIntake(hardwareMap);
-        shooter = new Shooter(hardwareMap);
-        servoAngle = new ServoAngle(hardwareMap);
-        servoTurn = new ServoTurn(hardwareMap);
+    public void init() {
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+        follower.update();
+        telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
-      //  PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
-        follower = new FollowerBuilder(followerConstants, hardwareMap)
-             //   .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
+        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(45, 98))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
                 .build();
 
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+
+        distanceEstimator = new DistanceEstimator(limelight, 11.0, 10.8, 29.0);
+
+        limelight.pipelineSwitch(6);
+        telemetry.setMsTransmissionInterval(11);
+        limelight.start();
+    }
+
+    @Override
+    public void start() {
         follower.startTeleopDrive();
+    }
 
-        waitForStart();
+    @Override
+    public void loop() {
+        //Call this once per loop
+        follower.update();
+        telemetryM.update();
 
-        while (opModeIsActive()) {
+        if (!automatedDrive) {
+            //Make the last parameter false for field-centric
+            //In case the drivers want to use a "slowMode" you can scale the vectors
 
-            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
-            follower.update();
+            //This is the normal version to use in the TeleOp
+            if (!slowMode) follower.setTeleOpDrive(
+                    -gamepad1.left_stick_y,
+                    -gamepad1.left_stick_x,
+                    -gamepad1.right_stick_x,
+                    true // Robot Centric
+            );
 
-
-            if(gamepad1.a){
-                Intake.startIntake();
-            }
-            if (gamepad1.b) servoAngle.setServoAdjust(0.1);
-
+                //This is how it looks with slowMode on
+            else follower.setTeleOpDrive(
+                    -gamepad1.left_stick_y * slowModeMultiplier,
+                    -gamepad1.left_stick_x * slowModeMultiplier,
+                    -gamepad1.right_stick_x * slowModeMultiplier,
+                    true // Robot Centric
+            );
         }
 
+        //Automated PathFollowing
+        if (gamepad1.aWasPressed()) {
+            follower.followPath(pathChain.get());
+            automatedDrive = true;
+        }
+
+        //Stop automated following if the follower is done
+        if (automatedDrive && (gamepad1.bWasPressed() || !follower.isBusy())) {
+            follower.startTeleopDrive();
+            automatedDrive = false;
+        }
+
+        //Slow Mode
+        if (gamepad1.rightBumperWasPressed()) {
+            slowMode = !slowMode;
+        }
+
+        //Optional way to change slow mode strength
+        if (gamepad1.xWasPressed()) {
+            slowModeMultiplier += 0.25;
+        }
+
+        //Optional way to change slow mode strength
+        if (gamepad2.yWasPressed()) {
+            slowModeMultiplier -= 0.25;
+        }
+
+        telemetryM.debug("position", follower.getPose());
+        telemetryM.debug("velocity", follower.getVelocity());
+        telemetryM.debug("automatedDrive", automatedDrive);
+        telemetryM.update();
     }
 }

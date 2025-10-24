@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 @Autonomous(name = "Final Alignment")
-public class Align extends LinearOpMode {
+public class FullAlignWVelocity extends LinearOpMode {
 
     private Limelight3A limelight;
 
@@ -33,6 +33,8 @@ public class Align extends LinearOpMode {
     private final double kP_turn = 0.03;
     private final double kP_forward = 0.05;
     private final double kP_strafe = 0.05;
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -84,68 +86,69 @@ public class Align extends LinearOpMode {
             Pose3D botpose = result.getBotpose();
             double yaw = botpose.getOrientation().getYaw();
 
-            double forwardPower = 0, strafePower = 0, turnPower = 0;
+            double forwardVel = 0, strafeVel = 0, turnVel = 0;
 
             boolean forwardAligned = Math.abs(distance - target_distance) <= dist_tolerance;
             boolean strafeAligned  = Math.abs(tx) <= strafe_tolerance;
             boolean turnAligned    = Math.abs(yaw + 125) <= turn_tolerance;
 
             if (!forwardAligned) {
-                forwardPower = kP_forward * (distance - target_distance);
-                forwardPower = Math.max(-0.5, Math.min(0.5, forwardPower));
+                forwardVel = kP_forward * (distance - target_distance);
+                forwardVel = Math.max(-50, Math.min(50, forwardVel));
             }
 
             if (!strafeAligned) {
-                strafePower = kP_strafe * tx;
-                strafePower = Math.max(-0.5, Math.min(0.5, strafePower));
+                strafeVel = kP_strafe * tx;
+                strafeVel = Math.max(-50, Math.min(50, strafeVel));
             }
 
             if (!turnAligned) {
-                turnPower = kP_turn * (yaw + 125);
-                turnPower = Math.max(-0.5, Math.min(0.5, turnPower));
+                turnVel = kP_turn * (yaw + 125);
+                turnVel = Math.max(-50, Math.min(50, turnVel));
             }
             if (forwardAligned && strafeAligned && turnAligned) {
                 stopRobot();
             }
 
-            move(forwardPower, strafePower, turnPower);
+            move(forwardVel, strafeVel, turnVel);
 
             telemetry.addData("Status", forwardAligned && strafeAligned && turnAligned ? "Fully Aligned" : "Aligning...");
             telemetry.addData("Distance", distance);
             telemetry.addData("Tx", tx);
             telemetry.addData("Yaw", yaw);
-            telemetry.addData("Forward Power", forwardPower);
-            telemetry.addData("Strafe Power", strafePower);
-            telemetry.addData("Turn Power", turnPower);
+            telemetry.addData("Forward Power", forwardVel);
+            telemetry.addData("Strafe Power", strafeVel);
+            telemetry.addData("Turn Power", turnVel);
             telemetry.update();
         }
     }
 
-    public void move(double forwardPower, double strafePower, double turnPower) {
-        double LFPower = forwardPower + strafePower + turnPower;
-        double RFPower = forwardPower - strafePower - turnPower;
-        double LRPower = forwardPower - strafePower + turnPower;
-        double RRPower = forwardPower + strafePower - turnPower;
 
-        double max = Math.max(Math.abs(LFPower), Math.max(Math.abs(RFPower),
-                Math.max(Math.abs(LRPower), Math.abs(RRPower))));
-        if (max > 1.0) {
-            LFPower /= max;
-            RFPower /= max;
-            LRPower /= max;
-            RRPower /= max;
-        }
+    public void move(double forwardVel, double strafeVel, double turnVel){
+        double LF_inchPerSec = forwardVel + strafeVel + turnVel;
+        double RF_inchPerSec = forwardVel - strafeVel - turnVel;
+        double LR_inchPerSec = forwardVel - strafeVel + turnVel;
+        double RR_inchPerSec = forwardVel + strafeVel - turnVel;
 
-        LF.setPower(LFPower);
-        RF.setPower(RFPower);
-        LR.setPower(LRPower);
-        RR.setPower(RRPower);
+        double Gear_Ratio = 1.85;
+        double Ticks_Per_Rev = 384.5;
+        double Wheel_circumference = 4.094 * Math.PI;
+
+        double LF_TPS = (LF_inchPerSec / Wheel_circumference) * Ticks_Per_Rev * Gear_Ratio;
+        double RF_TPS = (RF_inchPerSec / Wheel_circumference) * Ticks_Per_Rev * Gear_Ratio;
+        double LR_TPS = (LR_inchPerSec / Wheel_circumference) * Ticks_Per_Rev * Gear_Ratio;
+        double RR_TPS = (RR_inchPerSec / Wheel_circumference) * Ticks_Per_Rev * Gear_Ratio;
+
+        LF.setVelocity(LF_TPS);
+        RF.setVelocity(RF_TPS);
+        LR.setVelocity(LR_TPS);
+        RR.setVelocity(RR_TPS);
     }
 
     public void stopRobot() {
-        LF.setPower(0);
-        RF.setPower(0);
-        LR.setPower(0);
-        RR.setPower(0);
+        LF.setVelocity(0);
+        RF.setVelocity(0);
+        LR.setVelocity(0);
+        RR.setVelocity(0);
     }
 }

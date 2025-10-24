@@ -1,51 +1,51 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Drive {
-    private DcMotor FL, FR, RL, RR;
+    private DcMotorEx LF, RF, LR, RR;
 
-    // Constructor
-    public Drive(DcMotor FL, DcMotor FR, DcMotor RL, DcMotor RR) {
-        this.FL = FL;
-        this.FR = FR;
-        this.RL = RL;
+    // Constructor — initializes the motors
+    public Drive(DcMotorEx LF, DcMotorEx RF, DcMotorEx LR, DcMotorEx RR) {
+        this.LF = LF;
+        this.RF = RF;
+        this.LR = LR;
         this.RR = RR;
+
+        LR.setDirection(DcMotorSimple.Direction.REVERSE);
+        LF.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    // Method to drive using gamepad input
-    public void drive(Gamepad gamepad1) {
-        double y = -gamepad1.left_stick_y;   // Forward/backward
-        double x = gamepad1.left_stick_x;    // Strafe
-        double rx = gamepad1.right_stick_x;  // Rotate
+    // Drive method
+    public void drive(double forward, double strafe, double turn) {
+        final double DEAD = 0.05;
 
-        double FL_power = y + x + rx;
-        double FR_power = y - x - rx;
-        double RL_power = y - x + rx;
-        double RR_power = y + x - rx;
+        // Apply deadband
+        forward = (Math.abs(forward) < DEAD) ? 0 : forward;
+        strafe  = (Math.abs(strafe)  < DEAD) ? 0 : strafe;
+        turn    = (Math.abs(turn)    < DEAD) ? 0 : turn;
 
-        // Normalize powers
-        double max = Math.max(Math.abs(FL_power),
-                Math.max(Math.abs(FR_power), Math.max(Math.abs(RL_power), Math.abs(RR_power))));
+        // Calculate wheel powers
+        double flPower = forward + strafe + turn;
+        double frPower = forward - strafe - turn;
+        double blPower = forward - strafe + turn;
+        double brPower = forward + strafe - turn;
 
+        // Normalize (optional but recommended)
+        double max = Math.max(Math.abs(flPower),
+                Math.max(Math.abs(frPower), Math.max(Math.abs(blPower), Math.abs(brPower))));
         if (max > 1.0) {
-            FL_power /= max;
-            FR_power /= max;
-            RL_power /= max;
-            RR_power /= max;
+            flPower /= max;
+            frPower /= max;
+            blPower /= max;
+            brPower /= max;
         }
 
-        // Set motor powers
-        FL.setPower(FL_power);
-        FR.setPower(FR_power);
-        RL.setPower(RL_power);
-        RR.setPower(RR_power);
-
+        // Set power to motors
+        LF.setPower(flPower);
+        RF.setPower(frPower);
+        LR.setPower(blPower);
+        RR.setPower(brPower);
     }
 }
-
