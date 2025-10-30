@@ -9,18 +9,24 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Hardware.ActiveIntake;
 import org.firstinspires.ftc.teamcode.Hardware.Drive;
+import org.firstinspires.ftc.teamcode.Hardware.ServoTurn;
 import org.firstinspires.ftc.teamcode.Hardware.Shooter;
 
 @TeleOp
 public class TeleOpFull extends LinearOpMode {
     public DcMotorEx RF, LF, RR, LR;
-    public Shooter shooter;
 
     @Override
     public void runOpMode() throws InterruptedException {
         Shooter shooter = new Shooter(hardwareMap);
         CameraAlign cameraAlign = new CameraAlign(hardwareMap);
+        ActiveIntake intake = new ActiveIntake(hardwareMap);
+        ServoTurn ServoTurn = new ServoTurn(hardwareMap);
+        boolean lastLeft = false;
+        boolean lastRight = false;
+
 
         RF = hardwareMap.get(DcMotorEx.class, "RF");
         RR = hardwareMap.get(DcMotorEx.class, "RR");
@@ -41,9 +47,30 @@ public class TeleOpFull extends LinearOpMode {
 
             if (gamepad1.b) {
                 cameraAlign.Align(forward, strafe, turn);
-            } else {
+            }else {
                 drive(forward, strafe, turn);
             }
+
+            if(gamepad1.dpad_left){
+                intake.startIntake();
+            }else {
+                intake.stopIntake();
+            }
+
+            boolean leftPressed = gamepad1.left_bumper;
+            boolean rightPressed = gamepad1.right_bumper;
+
+            if (leftPressed && !lastLeft) {
+                ServoTurn.setCollect();
+            }
+
+            if (rightPressed && !lastRight) {
+                ServoTurn.setShoot();
+            }
+
+            lastLeft = leftPressed;
+            lastRight = rightPressed;
+
 
             if (gamepad1.dpad_up){
                 shooter.startShooter();
