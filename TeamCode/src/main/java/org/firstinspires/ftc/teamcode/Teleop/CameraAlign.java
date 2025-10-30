@@ -43,7 +43,7 @@ public class CameraAlign {
         if (result.isValid()) {
             double tx = result.getTx();
 
-            double kP = 0.05;
+            double kP = 0.04;
             double kD = 0.08;
             double dist_tolerance = 2.0;
 

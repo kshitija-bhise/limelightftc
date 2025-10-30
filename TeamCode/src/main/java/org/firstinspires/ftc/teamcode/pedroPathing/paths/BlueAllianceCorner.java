@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.paths;
 
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-import static org.firstinspires.ftc.teamcode.pedroPathing.paths.BlueAlliance.builder;
+
 
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.geometry.BezierCurve;
