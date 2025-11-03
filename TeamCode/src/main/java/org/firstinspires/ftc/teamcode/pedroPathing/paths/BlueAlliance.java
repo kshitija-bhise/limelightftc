@@ -107,6 +107,7 @@ public class BlueAlliance extends LinearOpMode {
                         autoShoot();
                         break;
                     case 1:
+                        intake.startIntake();
                         break;
                     case 2:
                         intake.stopIntake();
@@ -115,6 +116,7 @@ public class BlueAlliance extends LinearOpMode {
                         autoShoot();
                         break;
                     case 4:
+                        intake.startIntake();
                         break;
                     case 5:
                         intake.stopIntake();
@@ -123,6 +125,7 @@ public class BlueAlliance extends LinearOpMode {
                         autoShoot();
                         break;
                     case 7:
+                        intake.startIntake();
                         break;
                     case 8:
                         intake.stopIntake();
@@ -134,10 +137,12 @@ public class BlueAlliance extends LinearOpMode {
                 state++;   //increment of the state
                 if (state == 4 || state == 7 || state == 1) {
                     follower.followPath(paths.getPath(state), false);  //runs in a continuous manner
+                    follower.setMaxPower(0.9);
                 } else {
                     if (!(state == 0 || state == 2 || state == 5 || state == 8 || state == 3)) {
                         sleep(500);
                     }
+                    follower.setMaxPower(1);
                     follower.followPath(paths.getPath(state));
                 }
             }else{
@@ -180,19 +185,19 @@ public class BlueAlliance extends LinearOpMode {
             sleep(500);
             shooter.resetServo();
             intake.startIntake();
-            sleep(i == 2 ? 0 : 1200);
+            sleep(i == 2 ? 0 : 2000);
         }
     }
 
     public void autoShoot() {
         timer.reset();
-        while (timer.seconds() < 1) {
+        while (timer.milliseconds() < 500) {
             cameraAlign.Align(0, 0, 0);
             shooter.startShooter();
         }
         continueShoot();
         shooter.stopShooter();
-        intake.startIntake();
+        intake.stopIntake();
     }
 }
 
