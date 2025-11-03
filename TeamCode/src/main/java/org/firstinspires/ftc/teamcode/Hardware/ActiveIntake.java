@@ -24,4 +24,8 @@ public class ActiveIntake {
         Intake.setPower(0.0);
     }
 
+    public void slowIntake(){
+        Intake.setPower(0.7);
+    }
+
 }

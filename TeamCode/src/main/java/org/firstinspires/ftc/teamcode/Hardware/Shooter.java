@@ -1,20 +1,15 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import static java.lang.Thread.sleep;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Shooter {
     private final DcMotorEx S1;
     private final DcMotorEx S2;
     private final Servo Push;
-    private final double shooterVelocity = 1600;
+    public static double shooterVelocity = 1800;
 
     public Shooter(HardwareMap hardwareMap) {
         S1 = hardwareMap.get(DcMotorEx.class, "S1");
@@ -26,8 +21,8 @@ public class Shooter {
         S1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         S2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        S1.setVelocityPIDFCoefficients(300, 15, 30, 5);
-        S2.setVelocityPIDFCoefficients(300, 15, 30, 5);
+//        S1.setVelocityPIDFCoefficients(300, 15, 30, 5);
+//        S2.setVelocityPIDFCoefficients(300, 15, 30, 5);
 
     }
 
