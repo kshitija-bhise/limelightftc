@@ -11,6 +11,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -19,6 +20,8 @@ import org.opencv.core.Mat;
 
 import java.util.function.Supplier;
 
+
+@Disabled
 @Configurable
 @TeleOp(name = "TELEOPPPPP")
 public class Tele extends OpMode {

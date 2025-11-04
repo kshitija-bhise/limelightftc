@@ -9,6 +9,7 @@ import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -16,6 +17,8 @@ import org.firstinspires.ftc.teamcode.Vision.DistanceEstimator;
 
 import java.util.function.Supplier;
 
+
+@Disabled
 @Configurable
 @TeleOp(name = "TELEOP")
 public class TeleOpV1 extends OpMode {

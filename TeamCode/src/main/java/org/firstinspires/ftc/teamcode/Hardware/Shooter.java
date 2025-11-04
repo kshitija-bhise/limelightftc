@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Configurable
 public class Shooter {
     private final DcMotorEx S1;
     private final DcMotorEx S2;
     private final Servo Push;
-    public static double shooterVelocity = 1800;
+    public static double shooterVelocity = 2500
+            ;
 
     public Shooter(HardwareMap hardwareMap) {
         S1 = hardwareMap.get(DcMotorEx.class, "S1");
@@ -18,7 +21,7 @@ public class Shooter {
         resetServo();
         S1.setDirection(DcMotorEx.Direction.REVERSE);
 
-        S1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            S1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         S2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 //        S1.setVelocityPIDFCoefficients(300, 15, 30, 5);

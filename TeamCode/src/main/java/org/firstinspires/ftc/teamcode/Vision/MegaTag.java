@@ -32,6 +32,7 @@ public class MegaTag extends LinearOpMode {
         telemetry.getMsTransmissionInterval();
         Limelight.start();
 
+
         telemetry.addData(">", "Robot Ready.  Press Play.");
         telemetry.update();
         waitForStart();
@@ -46,13 +47,15 @@ public class MegaTag extends LinearOpMode {
 
             if (result != null && result.isValid()) {
                 Pose3D botpose_mt2 = result.getBotpose_MT2();
-                double x = botpose_mt2.getPosition().x;
-                double y = botpose_mt2.getPosition().y;
+                double x = botpose_mt2.getPosition().x / 39.37;
+                double y = botpose_mt2.getPosition().y / 39.37;
+
                 telemetry.addData("MT2 Location:", "(" + x + ", " + y + ")");
                 telemetry.addData("Heading", robotYaw);
                 telemetry.addData("Target X", result.getTx());
                 telemetry.addData("Target Y", result.getTy());
                 telemetry.addData("Target Area", result.getTa());
+                telemetry.addData("Positon",result.getBotpose());
                 telemetry.update();
             }
         }

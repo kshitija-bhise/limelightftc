@@ -10,12 +10,15 @@ import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
+
+@Disabled
 @Autonomous(name = "Final Alignment")
 public class Align extends LinearOpMode {
 

@@ -10,10 +10,13 @@ import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+
+@Disabled
 @Autonomous(name = "AlignmentVelocity")
 public class AlignWVelocity extends OpMode {
     private Limelight3A limelight;

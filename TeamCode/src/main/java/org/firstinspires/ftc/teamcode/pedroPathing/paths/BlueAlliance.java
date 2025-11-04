@@ -9,6 +9,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Hardware.ActiveIntake;
@@ -56,12 +57,13 @@ public class BlueAlliance extends LinearOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(180))
                 .addPath(
                         // grabPick
-                        new BezierLine(new Pose(45.053, 83.789), new Pose(16.5, 83.579))
+                        new BezierLine(new Pose(45.053, 83.789), new Pose(19, 83.579))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setGlobalDeceleration(1)
                 .addPath(
                         // Score
-                        new BezierLine(new Pose(16.5, 83.579), new Pose(45.000, 98.000))
+                        new BezierLine(new Pose(19, 83.579), new Pose(45.000, 98.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(135))
                 .addPath(
@@ -69,14 +71,15 @@ public class BlueAlliance extends LinearOpMode {
                         new BezierLine(new Pose(45.000, 98.000), new Pose(44.211, 60.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(180))
+                .setGlobalDeceleration(1)
                 .addPath(
                         // Path 5
-                        new BezierLine(new Pose(44.211, 60.000), new Pose(13.520, 60.211))
+                        new BezierLine(new Pose(44.211, 60.000), new Pose(15, 60.211))
                 )
                 .setTangentHeadingInterpolation()
                 .addPath(
                         // Path 6
-                        new BezierLine(new Pose(13.520, 60.211), new Pose(45.000, 98.000))
+                        new BezierLine(new Pose(15, 60.211), new Pose(45.000, 98.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(135))
                 .addPath(
@@ -110,7 +113,7 @@ public class BlueAlliance extends LinearOpMode {
                         intake.startIntake();
                         break;
                     case 2:
-                        intake.stopIntake();
+                        intake.slowIntake();
                         break;
                     case 3:
                         autoShoot();
@@ -119,7 +122,7 @@ public class BlueAlliance extends LinearOpMode {
                         intake.startIntake();
                         break;
                     case 5:
-                        intake.stopIntake();
+                        intake.slowIntake();
                         break;
                     case 6:
                         autoShoot();
@@ -128,7 +131,7 @@ public class BlueAlliance extends LinearOpMode {
                         intake.startIntake();
                         break;
                     case 8:
-                        intake.stopIntake();
+                        intake.slowIntake();
                         break;
                     case 9:
                         autoShoot();

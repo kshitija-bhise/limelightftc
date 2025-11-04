@@ -81,6 +81,7 @@ public class TeleOpFull extends LinearOpMode {
             telemetry.addData("Shoot", shoot);
             telemetry.addData("Shooter RPM", shooter.getShooterVelocity());
             telemetry.addData("Distance", distanceEstimator.getDistanceInches());
+             telemetry.addData("Tx", distanceEstimator.getTx());
             telemetry.update();
         }
     }

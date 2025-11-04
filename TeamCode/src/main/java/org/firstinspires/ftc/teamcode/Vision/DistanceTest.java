@@ -8,9 +8,12 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+
+@Disabled
 @TeleOp
 public class DistanceTest extends OpMode {
     private DistanceEstimator distanceEstimator;
