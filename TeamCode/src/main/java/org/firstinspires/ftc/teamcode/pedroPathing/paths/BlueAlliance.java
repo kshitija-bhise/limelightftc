@@ -100,7 +100,7 @@ public class BlueAlliance extends LinearOpMode {
 
                 .build();
 
-        follower.setStartingPose(new Pose(34.105, 136.210, Math.toRadians(180)));
+            follower.setStartingPose(new Pose(34.105, 136.210, Math.toRadians(180)));
         waitForStart();
 
         while (opModeIsActive()) {
@@ -181,26 +181,15 @@ public class BlueAlliance extends LinearOpMode {
 
     }
 
-    public void continueShoot() {
-        for (int i = 0; i < 3; i++) {
-            intake.stopIntake();
-            while (!shooter.shoot()) shooter.startShooter();
-            sleep(500);
-            shooter.resetServo();
-            intake.startIntake();
-            sleep(i == 2 ? 0 : 2000);
-        }
-    }
+
 
     public void autoShoot() {
         timer.reset();
         while (timer.milliseconds() < 500) {
-            cameraAlign.Align(0, 0, 0);
+            //here alignment is missing
             shooter.startShooter();
         }
-        continueShoot();
-        shooter.stopShooter();
-        intake.stopIntake();
+        shooter.continueShootThree(intake);
     }
 }
 

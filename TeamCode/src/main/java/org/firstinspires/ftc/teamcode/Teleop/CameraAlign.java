@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 
+import android.view.inputmethod.EditorBoundsInfo;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -20,7 +22,7 @@ public class CameraAlign {
     public static double kP = 0.04;
     public static double kD = 0.004 ;
     public static double maxPower = 0.45;
-    public static  double dist_tolerance = 5;
+    public static  double dist_tolerance = 2;
 
     public CameraAlign(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -43,7 +45,7 @@ public class CameraAlign {
     }
 
     // ✅ Align method with forward, strafe, and turn
-    public void Align(double forward, double strafe, double manualTurn) {
+    public double alignTurnValue(double manualTurn) {
         LLResult result = limelight.getLatestResult();
 
         double turnPower = manualTurn; // default = driver control
@@ -74,8 +76,7 @@ public class CameraAlign {
             previousTx = tx;
             previousTime = currentTime;
         }
-
-        drive(forward, strafe, turnPower);
+        return turnPower;
     }
 
     private void drive(double forward, double strafe, double turn) {

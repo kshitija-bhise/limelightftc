@@ -27,9 +27,6 @@ public class Shooting extends LinearOpMode {
         distanceEstimator = new DistanceEstimator(hardwareMap.get(Limelight3A.class, "limelight"), 19, 11, 29.5);
         waitForStart();
         timer.reset();
-        while (timer.seconds() < 2) {
-            cameraAlign.Align(0, 0, 0);
-        }
         while (opModeIsActive()) {
             timer.reset();
             while (timer.seconds() < 2 && opModeIsActive()) {
